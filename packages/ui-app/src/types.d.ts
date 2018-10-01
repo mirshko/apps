@@ -5,6 +5,8 @@
 import { TranslationFunction } from 'i18next';
 import { RxApiInterface } from '@polkadot/api-rx/types';
 
+import BN from 'bn.js';
+
 export type BareProps = {
   className?: string,
   style?: {
@@ -24,4 +26,14 @@ export type BaseContext = {
       location: Location
     }
   }
+};
+
+export type Fees = {
+  hasAvailable: boolean,
+  isCreation: boolean,
+  isNoEffect: boolean,
+  isRemovable: boolean,
+  isReserved: boolean,
+  txfees: BN,
+  txtotal: BN
 };

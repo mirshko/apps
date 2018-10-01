@@ -2,16 +2,15 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { I18nProps } from '@polkadot/ui-app/types';
+import { Fees, I18nProps } from './types';
 import { RxBalance, RxFees } from '@polkadot/ui-react-rx/ApiObservable/types';
-import { Fees } from './types';
 
 import BN from 'bn.js';
 import React from 'react';
-import Static from '@polkadot/ui-app/Static';
 import withMulti from '@polkadot/ui-react-rx/with/multi';
 import withObservable from '@polkadot/ui-react-rx/with/observable';
 
+import Static from './Static';
 import translate from './translate';
 
 type State = Fees;

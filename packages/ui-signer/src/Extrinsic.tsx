@@ -11,9 +11,8 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 import extrinsics from '@polkadot/extrinsics';
 import AddressMini from '@polkadot/ui-app/AddressMini';
-// FIXME - duplicate of app-transfer Fees.tsx. Move Fees to common place
-import FeeDisplay from '@polkadot/app-transfer/Fees';
 import AddressSummary from '@polkadot/ui-app/AddressSummary';
+import FeeDisplay from '@polkadot/ui-app/Fees';
 import InputAddress from '@polkadot/ui-app/InputAddress';
 import Input from '@polkadot/ui-app/Input';
 import Modal from '@polkadot/ui-app/Modal';

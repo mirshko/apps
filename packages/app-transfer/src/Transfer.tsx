@@ -2,21 +2,20 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-import { I18nProps } from '@polkadot/ui-app/types';
+import { Fees, I18nProps } from '@polkadot/ui-app/types';
 import { RxFees } from '@polkadot/ui-react-rx/ApiObservable/types';
 import { QueueProps } from '@polkadot/ui-signer/types';
-import { Fees } from './types';
 
 import BN from 'bn.js';
 import React from 'react';
 import AddressSummary from '@polkadot/ui-app/AddressSummary';
+import FeeDisplay from '@polkadot/ui-app/Fees';
 import InputAddress from '@polkadot/ui-app/InputAddress';
 import Input from '@polkadot/ui-app/Input';
 import withMulti from '@polkadot/ui-react-rx/with/multi';
 import withObservable from '@polkadot/ui-react-rx/with/observable';
 import { QueueConsumer } from '@polkadot/ui-signer/Context';
 
-import FeeDisplay from './Fees';
 import Submit from './Submit';
 import translate from './translate';
 
