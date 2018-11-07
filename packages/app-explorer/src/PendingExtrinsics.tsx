@@ -12,12 +12,42 @@ import { withMulti, withObservable } from '@polkadot/ui-react-rx/with/index';
 
 import translate from './translate';
 
+import Ws from '@polkadot/rpc-provider/ws';
+
+import Rpc from '@polkadot/rpc-core';
+
+import { ApiPromise } from '@polkadot/api';
+
 type Props = I18nProps & {
   // FIXME - add specific type for PendingExtrinsics
   pendingExtrinsics?: any
 };
 
 class PendingExtrinsics extends React.PureComponent<Props> {
+
+  async componentWillMount () {
+    // let api;
+    // api = new Rpc(new Ws('ws://127.0.0.1:9944'));
+
+    // // retrieves the pending extrinsics
+    // // api.author
+    // api.rpc.chain
+    //   .pendingExtrinsics()
+    //   .then((pendingExtrinsics) => {
+    //     console.log('pending extrinsics', pendingExtrinsics);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+
+    //     throw error;
+    //   });
+
+    const api = await ApiPromise.create();
+    const subscriptionId = await api.rpc.chain.pendingExtrinsics((pendingExtrinsics: any) => {
+      console.log(`pending extrinsics: `, pendingExtrinsics);
+    });
+  }
+
   render () {
     return [
       this.renderPendingExtrinsics()
@@ -50,6 +80,7 @@ class PendingExtrinsics extends React.PureComponent<Props> {
 }
 
 export default withMulti(
-  translate(PendingExtrinsics),
-  withObservable('pendingExtrinsics')
+  translate(PendingExtrinsics)
+  // ,
+  // withObservable('pendingExtrinsics')
 );
