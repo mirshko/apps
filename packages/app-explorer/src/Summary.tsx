@@ -9,6 +9,7 @@ import { CardSummary } from '@polkadot/ui-app/index';
 import { BestNumber, TimeNow, TimePeriod } from '@polkadot/ui-react-rx/index';
 
 import SummarySession from './SummarySession';
+import PendingExtrinsics from './PendingExtrinsics';
 import translate from './translate';
 
 type Props = I18nProps & {};
@@ -22,6 +23,9 @@ class Summary extends React.PureComponent<Props> {
         className={className}
         style={style}
       >
+        <section>
+          <PendingExtrinsics />
+        </section>
         <section>
           <CardSummary label={t('summary.period', {
             defaultValue: 'target time'
