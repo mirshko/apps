@@ -1,6 +1,6 @@
 // Copyright 2017-2018 @polkadot/app-storage authors & contributors
 // This software may be modified and distributed under the terms
-// of the ISC license. See the LICENSE file for details.
+// of the Apache-2.0 license. See the LICENSE file for details.
 
 import { TypeDef, TypeDefInfo, getTypeDef } from '@polkadot/types/codec';
 import { StorageFunction } from '@polkadot/types/StorageKey';
@@ -53,7 +53,7 @@ class Modules extends React.PureComponent<Props, State> {
 
   render () {
     const { t } = this.props;
-    const { isValid, params } = this.state;
+    const { isValid, key, params } = this.state;
 
     return (
       <section className='storage--actionrow'>
@@ -66,11 +66,12 @@ class Modules extends React.PureComponent<Props, State> {
             onChange={this.onChangeKey}
           />
           <Params
+            key={`${key.section}.${key.method}`}
             onChange={this.onChangeParams}
             params={params}
           />
         </div>
-        <Labelled className='storage--actionrow-button'>
+        <Labelled className='storage--actionrow-buttons'>
           <Button
             icon='plus'
             isDisabled={!isValid}
