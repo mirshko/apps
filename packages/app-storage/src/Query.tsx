@@ -12,7 +12,7 @@ import { Compact } from '@polkadot/types/codec';
 import { Button, Labelled } from '@polkadot/ui-app/index';
 import valueToText from '@polkadot/ui-app/Params/valueToText';
 import { withObservableDiv } from '@polkadot/ui-react-rx/with/index';
-import { isU8a, u8aToHex, u8aToString } from '@polkadot/util';
+import { isU8a, u8aToBn, u8aToHex, u8aToString } from '@polkadot/util';
 
 import translate from './translate';
 import { RenderFn, DefaultProps, ComponentRenderer } from '@polkadot/ui-react-rx/with/types';
@@ -42,6 +42,51 @@ enum StorageQueryParameter {
   Single = 1,
   Tuple // tuple with two or more elements
 }
+
+const formatValueForKey = function (key: StorageFunction, value: any): any {
+  // Convert tothe key entered by the user to hex for comparison against possible keys
+  const keyAsHex = u8aToHex(key);
+
+  // :code
+  const codeAsHex = u8aToHex(new Uint8Array([20, 58, 99, 111, 100, 101]));
+  // :heappages
+  const heappagesAsHex = u8aToHex(new Uint8Array([40, 58, 104, 101, 97, 112, 112, 97, 103, 101, 115]));
+  // :auth:len
+  const authLenAsHex = u8aToHex(new Uint8Array([36, 58, 97, 117, 116, 104, 58, 108, 101, 110]));
+  // :auth:
+  const authAsHex = u8aToHex(new Uint8Array([24, 58, 97, 117, 116, 104, 58]));
+  // :extrinsic_index
+  const extrinsicIndexAsHex = u8aToHex(new Uint8Array([64, 58, 101, 120, 116, 114, 105, 110, 115, 105, 99, 95, 105, 110, 100, 101, 120]));
+  // :changes_trie
+  const changesTrieAsHex = u8aToHex(new Uint8Array([52, 58, 99, 104, 97, 110, 103, 101, 115, 95, 116, 114, 105, 101]));
+
+  switch (keyAsHex) {
+    case codeAsHex: // :code
+      console.log(':code');
+      break;
+    case heappagesAsHex: // :heappages
+      console.log(':heappages');
+      break;
+    case authLenAsHex: // :auth:len
+      console.log(':auth:len');
+      // value = value ? u8aToBn(value, true).toString() : value;
+      // console.log('converted: ', value);
+      break;
+    case authAsHex: // :auth:
+      console.log(':auth:');
+      break;
+    case extrinsicIndexAsHex: // :extrinsic_index
+      console.log(':extrinsic_index');
+      break;
+    case changesTrieAsHex: // :changes_trie
+      console.log(':changes_trie');
+      break;
+    default:
+      break;
+  }
+
+  return value;
+};
 
 const generateDisplayParams = function (params: RawParam[]): Array<React.ReactNode> {
   const inputs: Array<React.ReactNode> = [];
@@ -100,18 +145,30 @@ class Query extends React.PureComponent<Props, State> {
   static getCachedComponent (query: QueryTypes): CacheInstance {
     const { id, key, params = [] } = query as StorageModuleQuery;
 
+    console.log('getCachedComponent id, key, params: ', id, key, params);
+    console.log('cache[id]: ', cache[id]);
+
     if (!cache[id]) {
       const values: Array<any> = params.map(({ value }) => value);
+      console.log('no cache with: values: ', values);
       const type = key.meta
         ? key.meta.type.toString()
         : 'Data';
       const defaultProps = { className: 'ui--output' };
 
       // render function to create an element for the query results which is plugged to the api
+      console.log('[key, ...values]: ', [key, ...values]);
       const fetchAndRenderHelper = withObservableDiv('rawStorage', { params: [key, ...values] });
       const pluggedComponent = fetchAndRenderHelper(
         // By default we render a simple div node component with the query results in it
-        (value: any) => valueToText(type, value, true, true),
+        (value: any) => {
+          console.log('type, value: ', type, value);
+          // console.log('valueToText(type, value, true, true): ', valueToText(type, value, true, true));
+
+          // change the format of the value depending on its key
+          value = value && formatValueForKey(key, value);
+          return valueToText(type, value, true, true);
+        },
         defaultProps
       );
       cache[query.id] = Query.createComponentCacheInstance(type, pluggedComponent, defaultProps, fetchAndRenderHelper);
@@ -156,6 +213,9 @@ class Query extends React.PureComponent<Props, State> {
     const { Component } = this.state;
     const { key } = value;
 
+    console.log('Component: ', Component);
+    console.log('value: ', value);
+
     return (
       <div className='storage--Query storage--actionrow'>
         <Labelled
@@ -194,7 +254,7 @@ class Query extends React.PureComponent<Props, State> {
       />
     ];
 
-    if (key.meta.type.toString() === 'Bytes') {
+    if (key.meta && key.meta.type.toString() === 'Bytes') {
       // TODO We are currently not performing a copy
       // buttons.unshift(
       //   <Button
@@ -232,6 +292,7 @@ class Query extends React.PureComponent<Props, State> {
   private keyToName (key: Uint8Array | StorageFunction): string {
     if (isU8a(key)) {
       const u8a = Compact.stripLengthPrefix(key);
+      console.log('u8aToString(u8a): ', u8aToString(u8a));
 
       // If the string starts with `:`, handle it as a pure string
       return u8a[0] === 0x3a

@@ -18,6 +18,8 @@ export default class Queries extends React.PureComponent<Props> {
   render () {
     const { onRemove, value } = this.props;
 
+    console.log('queries: ', value);
+
     if (!value || !value.length) {
       return null;
     }

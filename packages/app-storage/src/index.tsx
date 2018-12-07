@@ -44,6 +44,7 @@ class StorageApp extends React.PureComponent<Props, State> {
   }
 
   private onAdd = (query: QueryTypes): void => {
+    console.log('adding query: ', query);
     this.setState(
       (prevState: State): State => ({
         queue: [query].concat(prevState.queue)

@@ -64,6 +64,7 @@ class Raw extends React.PureComponent<Props, State> {
     const { onAdd } = this.props;
     const { key } = this.state;
 
+    console.log('adding key: ', key);
     onAdd({ key });
   }
 
