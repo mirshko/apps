@@ -40,16 +40,21 @@ type CacheInstance = {
 const cache: Array<CacheInstance> = [];
 
 const generatePlain = function (param: RawParam, index: number, paramsLength: number): React.ReactNode {
+  const paramType = (param.typeDef as TypeDef).type;
+
   return (
     <span key={`param_${index}`}>
-      {param.type}={valueToText(param.type, param.value)}{index !== paramsLength - 1 ? ', ' : ''}
+      {paramType}={valueToText(paramType, param.value)}{index !== paramsLength - 1 ? ', ' : ''}
     </span>
   );
 };
 
 const generateTuple = function (param: RawParam, index: number): React.ReactNode {
+  const paramType = (param.typeDef as TypeDef).type;
+  const paramSubArray = (param.typeDef as TypeDef).sub as TypeDef[];
+
   const subs = (param: RawParam): Array<React.ReactNode> => {
-    return (param.sub as TypeDef[]).map((el, i) =>
+    return paramSubArray.map((el, i) =>
       el && valueToText(el.type, param.value[i])
     );
   };
@@ -58,35 +63,38 @@ const generateTuple = function (param: RawParam, index: number): React.ReactNode
     index === 0 ? '(' : '';
 
   const end = (index: number) =>
-    index !== (param.sub as TypeDef[]).length - 1 ? ', ' : ')';
+    index !== paramSubArray.length - 1 ? ', ' : ')';
 
   const contents = subs(param).map((el: React.ReactNode, i: number) =>
     <span>{start(i)}{el}{end(i)}</span>
   );
 
-  return <span key={`param_${index}`}>{param.type}={contents}</span>;
+  return <span key={`param_${index}`}>{paramType}={contents}</span>;
 };
 
 const generateDisplayParams = function (params: RawParam[]): Array<React.ReactNode> {
   const inputs: Array<React.ReactNode> = [];
 
   params && params.forEach(function (param, index) {
+    const paramInfo = (param.typeDef as TypeDef).info;
+    const paramType = (param.typeDef as TypeDef).type;
+    const paramSubArray = (param.typeDef as TypeDef).sub as TypeDef[];
     const paramsLength = params.length;
 
     // skip the function parameter if it is invalid, the `info` (amount of elements in the tuple)
     // are unknown, or if the type `type` is unknown type
-    if (!param.isValid || !param.info || !param.type) {
+    if (!param.isValid || !paramInfo || !paramType) {
       inputs.push(<span key={`param_${index}_unknown`}>unknown</span>);
       return;
     }
 
     // Plain single parameter
-    if (param.info && param.info === TypeDefInfo.Plain) {
+    if (paramInfo && paramInfo === TypeDefInfo.Plain) {
       inputs.push(generatePlain(param, index, paramsLength));
     }
 
     // Tuple (where `sub` is an array)
-    if (param.info && param.info === TypeDefInfo.Tuple && param.sub && (param.sub as TypeDef[]).length) {
+    if (paramInfo && paramInfo === TypeDefInfo.Tuple && paramSubArray && paramSubArray.length) {
       inputs.push(generateTuple(param, index));
     }
   });
