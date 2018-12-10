@@ -32,11 +32,13 @@ class Walker extends Lint.RuleWalker {
       }
 
       // Create a failure at the current position
-      this.addFailureAt(
-        0, // i.e. sourceFile.getStart()
-        1, // i.e. sourceFile.getEnd() - sourceFile.getStart()
-        Rule.FAILURE_STRING,
-        this.fix(sourceFile, copyrightHeaderTemplate)
+      this.addFailure(
+        this.createFailure(
+          0, // i.e. sourceFile.getStart()
+          1, // i.e. sourceFile.getEnd() - sourceFile.getStart()
+          Rule.FAILURE_STRING,
+          this.fix(sourceFile, copyrightHeaderTemplate)
+        )
       );
 
       return super.visitSourceFile(sourceFile);
