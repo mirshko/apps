@@ -1,3 +1,7 @@
 {
-  "extends": "@polkadot/dev-react/config/tslint"
+  "extends": "@polkadot/dev-react/config/tslint",
+  "rulesDirectory": "./tslint-react/rules/src",
+  "rules": {
+    "file-should-contain-header": true
+  }
 }
