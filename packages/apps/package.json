@@ -20,6 +20,7 @@
     "@polkadot/app-extrinsics": "^0.21.0",
     "@polkadot/app-rpc": "^0.21.0",
     "@polkadot/app-settings": "^0.21.0",
+    "@polkadot/app-contracts": "^0.21.0",
     "@polkadot/app-staking": "^0.21.0",
     "@polkadot/app-storage": "^0.21.0",
     "@polkadot/app-toolbox": "^0.21.0",

@@ -1,0 +1,17 @@
+{
+  "name": "@polkadot/app-contracts",
+  "version": "0.21.0",
+  "description": "A smart contracts app",
+  "main": "index.js",
+  "repository": "https://github.com/polkadot-js/apps.git",
+  "author": "Parity Technologies <admin@parity.io>",
+  "maintainers": [
+    "Parity Technologies <admin@parity.io>"
+  ],
+  "contributors": [],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@babel/runtime": "^7.2.0",
+    "@polkadot/ui-app": "^0.21.0"
+  }
+}

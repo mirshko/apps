@@ -14,6 +14,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const packages = [
   'app-accounts',
   'app-addresses',
+  'app-contracts',
   'app-democracy',
   'app-explorer',
   'app-extrinsics',
